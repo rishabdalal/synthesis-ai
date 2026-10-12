@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Synthesis</title>
+<meta name="description" content="Synthesis builds synthetic customers trained on your own data, so you can see how customers will react to a pricing, onboarding or offer change before you ship it.">
+<meta property="og:title" content="Synthesis">
+<meta property="og:description" content="Synthetic customers trained on your own data. Change a lever, see what happens, before you ship.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232E4FD1'/%3E%3Ccircle cx='11' cy='16' r='4' fill='white'/%3E%3Ccircle cx='21' cy='11' r='3' fill='white' opacity='.7'/%3E%3Ccircle cx='21' cy='21' r='3' fill='white' opacity='.45'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one narrow column of text, a funnel strip as the one visual, plain sections below. */
+:root {
+  --ground: #F4F6F4;
+  --surface: #FFFFFF;
+  --ink: #17211D;
+  --muted: #4E5B55;
+  --line: #DCE2DE;
+  --accent: #2E4FD1;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #E8ECFB;
+  --warn: #9A5B00;
+  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground: #111815;
+    --surface: #18211D;
+    --ink: #E9EEEB;
+    --muted: #A3B0AA;
+    --line: #2C3833;
+    --accent: #7F98FF;
+    --accent-ink: #0E1430;
+    --accent-soft: #1E2648;
+    --warn: #E0A33B;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.6;
+}
+a { color: var(--accent); }
+a:focus-visible, .button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-inline: 24px; }
+header.top { padding-block: 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
+.brand svg { width: 30px; height: 30px; }
+.tag { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); padding: 5px 10px; border-radius: 999px; }
+
+.hero { padding-block: 56px 40px; display: grid; gap: 22px; max-width: 760px; }
+.hero h1 { margin: 0; font-family: var(--display); font-weight: 700; font-size: clamp(40px, 6.5vw, 68px); line-height: 1.02; letter-spacing: -0.03em; text-wrap: balance; }
+.hero p { margin: 0; font-size: 19px; color: var(--muted); max-width: 62ch; }
+.actions { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+.button { display: inline-flex; align-items: center; gap: 8px; padding: 14px 22px; border-radius: 10px; background: var(--accent); color: var(--accent-ink); font-weight: 600; text-decoration: none; font-size: 16px; }
+.quiet { color: var(--muted); font-size: 15px; }
+
+/* The one visual: a journey with a lever pulled */
+.journey { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 24px; margin-block: 8px 72px; }
+.journey-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.journey-head strong { font-family: var(--display); font-size: 18px; }
+.journey-head span { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.step { border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; gap: 6px; }
+.step .name { font-weight: 600; font-size: 15px; }
+.step .rate { font-family: var(--mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.step.pulled { border: 2px solid var(--accent); background: var(--accent-soft); }
+.lever { font-family: var(--mono); font-size: 13px; }
+.lever s { color: var(--muted); }
+.result { margin-top: 18px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.metric { border-top: 2px solid var(--line); padding-top: 10px; }
+.metric b { display: block; font-family: var(--mono); font-weight: 500; font-size: 26px; font-variant-numeric: tabular-nums; }
+.metric span { font-size: 13px; color: var(--muted); }
+.note { margin: 14px 0 0; font-size: 12px; color: var(--muted); }
+
+section.block { padding-block: 8px 64px; }
+section.block h2 { font-family: var(--display); font-size: clamp(26px, 3.6vw, 34px); letter-spacing: -0.02em; margin: 0 0 22px; text-wrap: balance; }
+.how { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; counter-reset: how; }
+.how li { counter-increment: how; display: grid; gap: 8px; align-content: start; }
+.how li::before { content: counter(how, decimal-leading-zero); font-family: var(--mono); font-size: 13px; color: var(--accent); }
+.how h3, .diff h3 { margin: 0; font-size: 18px; }
+.how p, .diff p { margin: 0; color: var(--muted); font-size: 16px; }
+.diff { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 40px; }
+.uses { display: flex; flex-wrap: wrap; gap: 10px; padding: 0; margin: 0; list-style: none; }
+.uses li { background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 9px 16px; font-size: 15px; }
+.cta { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 32px; display: grid; gap: 14px; margin-bottom: 64px; }
+.cta h2 { margin: 0; }
+.cta p { margin: 0; color: var(--muted); max-width: 60ch; }
+footer { border-top: 1px solid var(--line); padding-block: 24px 40px; color: var(--muted); font-size: 14px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+@media (max-width: 760px) {
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .how, .diff { grid-template-columns: 1fr; }
+  .result { grid-template-columns: 1fr; }
+  .hero { padding-block: 32px 28px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .step.pulled { transition: transform .2s ease; }
+  .step.pulled:hover { transform: translateY(-2px); }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#top" aria-label="Synthesis home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#2E4FD1"/><circle cx="11" cy="16" r="4" fill="#fff"/><circle cx="21" cy="11" r="3" fill="#fff" opacity=".7"/><circle cx="21" cy="21" r="3" fill="#fff" opacity=".45"/></svg>
+      Synthesis
+    </a>
+    <span class="tag">Early access · 2026</span>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <h1>Know how your customers will react before you ship.</h1>
+      <p>Synthesis builds synthetic customers trained on your own data. See your real customer journey, change a lever like price, trial length or an offer, and get the likely outcome with odds and the evidence behind it.</p>
+      <div class="actions">
+        <a class="button" href="mailto:dalalr032@gmail.com?subject=Synthesis%20early%20access">Request early access</a>
+        <span class="quiet">For product, growth and pricing teams.</span>
+      </div>
+    </section>
+
+    <figure class="journey" aria-label="Example: a subscription journey with the annual price lever changed">
+      <div class="journey-head">
+        <strong>Subscription journey</strong>
+        <span>Illustrative example</span>
+      </div>
+      <div class="steps">
+        <div class="step pulled">
+          <div class="name">Paywall</div>
+          <div class="lever">annual <s>$69</s> → $79</div>
+          <div class="rate">lever changed</div>
+        </div>
+        <div class="step"><div class="name">Trial</div><div class="rate">62% start</div></div>
+        <div class="step"><div class="name">Paid</div><div class="rate">41% convert</div></div>
+        <div class="step"><div class="name">Renewed</div><div class="rate">78% renew</div></div>
+      </div>
+      <div class="result">
+        <div class="metric"><b>+5.8%</b><span>revenue per new user (90% range −1.9% to +12.6%)</span></div>
+        <div class="metric"><b>81%</b><span>chance $79 beats $69</span></div>
+        <div class="metric"><b>3%</b><span>risk revenue falls more than 5%</span></div>
+      </div>
+      <figcaption class="note">Numbers are an illustration of the output, not results from a real company.</figcaption>
+    </figure>
+
+    <section class="block" aria-labelledby="how">
+      <h2 id="how">How it works</h2>
+      <ol class="how">
+        <li><h3>Connect your data</h3><p>Read-only connections to Postgres, Snowflake, S3, Delta tables and tools like Stripe. Nothing is installed in your systems.</p></li>
+        <li><h3>See your real journey</h3><p>Your funnel is built from your own events: every step, where customers drop off, and the customer types you actually have.</p></li>
+        <li><h3>Pull a lever, see the outcome</h3><p>Thousands of synthetic customers walk your journey with the change applied. You get the result, the odds, and which customers win or lose.</p></li>
+      </ol>
+    </section>
+
+    <section class="block" aria-labelledby="diff">
+      <h2 id="diff">Not a chatbot pretending to be a customer</h2>
+      <div class="diff">
+        <div><h3>Grounded in what your customers did</h3><p>Every synthetic decision is checked against how similar real customers behaved, and you can see the evidence for any choice.</p></div>
+        <div><h3>Odds, not one guess</h3><p>Each experiment runs many times and reports a range, the chance it wins, and the downside risk.</p></div>
+        <div><h3>Accuracy you can check</h3><p>We replay your past A/B tests and show how often Synthesis would have called the result.</p></div>
+        <div><h3>Your data stays yours</h3><p>An isolated environment per company, read-only access you can revoke anytime, and your data only ever trains your model.</p></div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="uses">
+      <h2 id="uses">What teams test</h2>
+      <ul class="uses">
+        <li>Price and plan changes</li>
+        <li>Trial length and paywalls</li>
+        <li>Discounts and offers</li>
+        <li>Cancellation and win-back offers</li>
+        <li>Onboarding changes</li>
+        <li>Fees and shipping thresholds</li>
+      </ul>
+    </section>
+
+    <section class="cta" aria-labelledby="early">
+      <h2 id="early" style="font-family: var(--display); font-size: 28px; letter-spacing: -0.02em;">Working with early design partners</h2>
+      <p>If you make pricing, onboarding or offer decisions and wish you could test them before they reach real customers, we'd like to talk.</p>
+      <div class="actions">
+        <a class="button" href="mailto:dalalr032@gmail.com?subject=Synthesis%20design%20partner">Get in touch</a>
+        <span class="quiet">dalalr032@gmail.com</span>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 Synthesis</span>
+    <span>Synthetic customers grounded in real data</span>
+  </footer>
+</div>
+</body>
+</html>
